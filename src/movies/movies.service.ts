@@ -11,7 +11,6 @@ export class MoviesService {
     @InjectRepository(Movie)
     private readonly movieRepository: Repository<Movie>,
   ) {}
-  private movies: Movie[] = [];
 
   findAll(): Promise<Movie[]> {
     return this.movieRepository.find();
