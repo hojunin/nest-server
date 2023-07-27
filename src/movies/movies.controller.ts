@@ -18,8 +18,8 @@ export class MoviesController {
   constructor(private readonly MoviesService: MoviesService) {}
 
   @Get()
-  getAll(): Movie[] {
-    return this.MoviesService.getAll();
+  getAll(): Promise<Movie[]> {
+    return this.MoviesService.findAll();
   }
 
   @Get('search')
@@ -28,8 +28,8 @@ export class MoviesController {
   }
 
   @Get('/:id')
-  getOne(@Param('id') movieId: number): Movie {
-    return this.MoviesService.getOne(movieId);
+  getOne(@Param('id') movieId: number): Promise<Movie> {
+    return this.MoviesService.findOne(movieId);
   }
 
   @Post()
@@ -39,7 +39,7 @@ export class MoviesController {
 
   @Delete('/:id')
   deleteMovie(@Param('id') movieId: number) {
-    return this.MoviesService.deleteOne(movieId);
+    return this.MoviesService.remove(movieId);
   }
 
   @Patch('/:id')
