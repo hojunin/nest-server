@@ -34,11 +34,13 @@ export class BooksService {
   }
 
   async remove(id: number): Promise<void> {
-    this.findOne(id);
+    await this.findOne(id);
     await this.bookRepository.delete(id);
   }
 
-  update(id: number, updateData: UpdateBookDto) {
-    const target = this.findOne(id);
+  async update(id: number, updateData: UpdateBookDto): Promise<Book> {
+    const target = await this.findOne(id);
+
+    return await this.bookRepository.save({ ...target, ...updateData });
   }
 }
