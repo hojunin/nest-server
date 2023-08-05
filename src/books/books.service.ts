@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book-dto';
@@ -14,6 +15,7 @@ export class BooksService {
   constructor(
     @InjectRepository(Book)
     private readonly bookRepository: Repository<Book>,
+    private readonly logger = new Logger(BooksService.name),
   ) {}
 
   async findAll(): Promise<Book[]> {
@@ -31,6 +33,7 @@ export class BooksService {
   }
 
   async create(createBookData: CreateBookDto): Promise<Book> {
+    this.logger.log(createBookData);
     const queryRunner =
       this.bookRepository.manager.connection.createQueryRunner();
 

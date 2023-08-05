@@ -6,6 +6,7 @@ import { MySqlConfigModule } from './config/config.module';
 import { MySqlConfigService } from './config/config.service';
 import { BooksModule } from './books/books.module';
 import { ProfessModule } from './profess/profess.module';
+import { MyWinstonModule } from './winston/winston.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ProfessModule } from './profess/profess.module';
     }),
     BooksModule,
     ProfessModule,
+    MyWinstonModule,
   ],
   controllers: [AppController],
   providers: [],
