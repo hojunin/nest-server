@@ -6,7 +6,6 @@ import {
   Param,
   Patch,
   Post,
-  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { Book } from './entities/book.entity';
@@ -17,10 +16,7 @@ import { AuthorizationGuard } from 'src/guards/authorization.guard';
 
 @Controller('books')
 export class BooksController {
-  constructor(
-    private readonly BooksService: BooksService,
-    private readonly ConfigService: ConfigService,
-  ) {}
+  constructor(private readonly BooksService: BooksService) {}
   @Get()
   getAll(): Promise<Book[]> {
     return this.BooksService.findAll();
