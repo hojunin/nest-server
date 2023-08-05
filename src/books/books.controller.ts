@@ -6,11 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { Book } from './entities/book.entity';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book-dto';
 import { UpdateBookDto } from './dto/update-book-dto';
+import { AuthorizationGuard } from 'src/guards/authorization.guard';
 
 @Controller('books')
 export class BooksController {
@@ -26,16 +28,19 @@ export class BooksController {
   }
 
   @Post()
+  @UseGuards(AuthorizationGuard)
   createBook(@Body() createBookData: CreateBookDto) {
     return this.BooksService.create(createBookData);
   }
 
   @Delete('/:id')
+  @UseGuards(AuthorizationGuard)
   deleteBook(@Param('id') bookId: number) {
     return this.BooksService.remove(bookId);
   }
 
   @Patch('/:id')
+  @UseGuards(AuthorizationGuard)
   updateBook(@Param('id') bookId: number, @Body() updateData: UpdateBookDto) {
     return this.BooksService.update(bookId, updateData);
   }
