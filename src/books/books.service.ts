@@ -21,14 +21,13 @@ export class BooksService {
   }
 
   async findOne(id: number): Promise<Book> {
-    try {
-      const target = this.bookRepository.findOneBy({ id });
-      if (!target) {
-        throw new NotFoundException(`ID가 ${id}인 책이 존재하지 않습니다.`);
-      }
+    const target = await this.bookRepository.findOneBy({ id });
 
-      return target;
-    } catch (error) {}
+    if (!target) {
+      throw new NotFoundException(`ID가 ${id}인 책이 존재하지 않습니다.`);
+    }
+
+    return target;
   }
 
   async create(createBookData: CreateBookDto): Promise<Book> {
