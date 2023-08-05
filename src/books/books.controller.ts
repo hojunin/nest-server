@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Patch,
   Post,
@@ -13,10 +14,15 @@ import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book-dto';
 import { UpdateBookDto } from './dto/update-book-dto';
 import { AuthorizationGuard } from 'src/guards/authorization.guard';
-
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
 @Controller('books')
 export class BooksController {
-  constructor(private readonly BooksService: BooksService) {}
+  constructor(
+    private readonly BooksService: BooksService,
+
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
+  ) {}
   @Get()
   getAll(): Promise<Book[]> {
     return this.BooksService.findAll();
@@ -30,6 +36,7 @@ export class BooksController {
   @Post()
   @UseGuards(AuthorizationGuard)
   createBook(@Body() createBookData: CreateBookDto) {
+    this.logger.info(JSON.stringify(createBookData));
     return this.BooksService.create(createBookData);
   }
 

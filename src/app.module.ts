@@ -6,7 +6,11 @@ import { MySqlConfigModule } from './config/config.module';
 import { MySqlConfigService } from './config/config.service';
 import { BooksModule } from './books/books.module';
 import { ProfessModule } from './profess/profess.module';
-import { MyWinstonModule } from './winston/winston.module';
+import {
+  utilities as nestWinstonModuleUtilities,
+  WinstonModule,
+} from 'nest-winston';
+import * as winston from 'winston';
 
 @Module({
   imports: [
@@ -18,7 +22,20 @@ import { MyWinstonModule } from './winston/winston.module';
     }),
     BooksModule,
     ProfessModule,
-    MyWinstonModule,
+    WinstonModule.forRoot({
+      transports: [
+        new winston.transports.Console({
+          level: process.env.NODE_ENV === 'production' ? 'info' : 'silly',
+          format: winston.format.combine(
+            winston.format.colorize(),
+            winston.format.timestamp(),
+            nestWinstonModuleUtilities.format.nestLike('MyApp', {
+              prettyPrint: true,
+            }),
+          ),
+        }),
+      ],
+    }),
   ],
   controllers: [AppController],
   providers: [],

@@ -15,8 +15,8 @@ export class BooksService {
   constructor(
     @InjectRepository(Book)
     private readonly bookRepository: Repository<Book>,
-    private readonly logger = new Logger(BooksService.name),
-  ) {}
+  ) // private readonly logger = new Logger(BooksService.name),
+  {}
 
   async findAll(): Promise<Book[]> {
     return this.bookRepository.find();
@@ -33,7 +33,7 @@ export class BooksService {
   }
 
   async create(createBookData: CreateBookDto): Promise<Book> {
-    this.logger.log(createBookData);
+    // this.logger.log(createBookData);
     const queryRunner =
       this.bookRepository.manager.connection.createQueryRunner();
 
