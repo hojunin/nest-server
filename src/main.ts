@@ -15,7 +15,11 @@ async function bootstrap() {
     }),
   );
   app.enableCors({
-    origin: ['https://www.hojunin.com', 'https://hojunin.com'],
+    origin: [
+      'https://www.hojunin.com',
+      'https://hojunin.com',
+      'http://localhost:3000',
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
