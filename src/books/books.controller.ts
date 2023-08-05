@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Headers,
   Param,
   Patch,
   Post,
@@ -14,7 +13,6 @@ import { Book } from './entities/book.entity';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book-dto';
 import { UpdateBookDto } from './dto/update-book-dto';
-import { ConfigService } from '@nestjs/config';
 import { AuthorizationGuard } from 'src/guards/authorization.guard';
 
 @Controller('books')
