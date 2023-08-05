@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book-dto';
 import { Book } from './entities/book.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -20,7 +24,7 @@ export class BooksService {
     try {
       const target = this.bookRepository.findOneBy({ id });
       if (!target) {
-        throw new NotFoundException(`Book with ID : ${id}`);
+        throw new NotFoundException(`ID가 ${id}인 책이 존재하지 않습니다.`);
       }
 
       return target;
@@ -28,9 +32,33 @@ export class BooksService {
   }
 
   async create(createBookData: CreateBookDto): Promise<Book> {
+    const queryRunner =
+      this.bookRepository.manager.connection.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
     try {
-      return await this.bookRepository.save(createBookData);
-    } catch (error) {}
+      const existingBook = await queryRunner.manager.findOne(Book, {
+        where: { title: createBookData.title },
+      });
+
+      if (existingBook) {
+        throw new ConflictException('같은 이름의 책이 존재합니다.');
+      }
+
+      const newBook = this.bookRepository.create(createBookData);
+      const savedBook = await queryRunner.manager.save(newBook);
+
+      await queryRunner.commitTransaction();
+
+      return savedBook;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async remove(id: number): Promise<void> {
