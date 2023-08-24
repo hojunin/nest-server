@@ -12,6 +12,7 @@ import {
 } from 'nest-winston';
 import * as winston from 'winston';
 import { LoggerMiddleware } from './logger.middleware';
+import { TranslateModule } from './translate/translate.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { LoggerMiddleware } from './logger.middleware';
         }),
       ],
     }),
+    TranslateModule,
   ],
   controllers: [AppController],
   providers: [],
